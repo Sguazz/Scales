@@ -6,14 +6,16 @@ import Data.List
 import Test.QuickCheck
 import Test.QuickCheck.All
 
-import Scales hiding (main)
+import Lib.DataTypes
+import Lib.Stuff
+import Lib.Layout
 
 ----------------------
 -- QuickCheck setup --
 ----------------------
 
 instance Arbitrary Scale where
-    arbitrary = oneof $ map return [Major, Pentatonic, Blues]
+    arbitrary = oneof $ map return [Major ..]
 
 instance Arbitrary Mode where
     arbitrary = oneof $ map return [Ionian ..]
@@ -46,7 +48,7 @@ prop_padding as = all ((== l) . length) $ padList as
 -------------
 
 sortedScale :: Scale -> Mode -> Key -> [Note]
-sortedScale s m k = sort . tops $ scaleNotes s m k
+sortedScale s m k = sort . nub . tops $ scaleNotes s m k
 
 sortedScale' :: Scale -> (Key, Mode) -> [Note]
 sortedScale' s (k, m) = sortedScale s m k
