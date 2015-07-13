@@ -1,6 +1,7 @@
 module Scales where
 
 import Data.List
+import Data.Maybe
 import System.Environment
 
 ------------------
@@ -11,15 +12,15 @@ data Note = C | Cs | D | Ds | E | F | Fs | G | Gs | A | As | B
     deriving (Eq, Ord, Show, Read, Enum)
 
 data Scale = Major | Minor | Harmonic | Pentatonic | Blues
-    deriving (Eq, Show, Read)
+    deriving (Eq, Show, Read, Enum)
 
 data Interval = Root       | MinorSecond   | Second          | MinorThird   |
                 Third      | PerfectFourth | DiminishedFifth | PerfectFifth |
                 MinorSixth | Sixth         | MinorSeventh    | Seventh
-    deriving (Eq, Ord, Show, Enum)
+    deriving (Eq, Ord, Show, Read, Enum)
 
 data Mode = Ionian | Dorian | Phrygian | Lydian | Mixolydian | Aeolian | Locrian
-    deriving (Eq, Show, Read, Enum)
+    deriving (Eq, Ord, Show, Read, Enum)
 
 type Key = Note
 
@@ -226,9 +227,26 @@ modulationColumn :: Mode -> Key -> [String]
 modulationColumn m k = mapWithHeader title (modulations m k)
   where title = "Play these " ++ show m ++ " modes to get..."
 
+-- Menu Controls
+
+spinWheel :: (Show a, Eq a) => [a] -> a -> [String]
+spinWheel xs s = columnLayout " " cursor (spinElements xs s)
+
+cursor = [" ", ">", " "]
+
+spinElements :: (Show a, Eq a) => [a] -> a -> [String]
+spinElements xs s = take 3 . drop n $ xs'
+  where xs' = padList $ [""] ++ map show xs ++ [""]
+        n = fromJust $ s `elemIndex` xs
+
 ----------
 -- Main --
 ----------
+
+menuLayout :: Scale -> Mode -> Key -> [String]
+menuLayout s m k = columns [ spinWheel [C ..] k
+                           , spinWheel [Major ..] s
+                           , spinWheel [Ionian ..] m ]
 
 layout :: Scale -> Mode -> Key -> [String]
 layout s m k =
@@ -240,6 +258,11 @@ layout s m k =
 display :: [String] -> IO ()
 display = putStrLn . unlines
 
+everything :: Scale -> Mode -> Key -> [String]
+everything s m k = rows [ menuLayout s m k
+                        , ["- - - - - - - - - - - - - - - - - -"]
+                        , layout s m k ]
+
 main = do
     [key, scale, mode] <- getArgs
-    display $ layout (read scale) (read mode) (read key)
+    display $ everything (read scale) (read mode) (read key)
