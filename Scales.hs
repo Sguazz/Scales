@@ -10,7 +10,7 @@ import System.Environment
 data Note = C | Cs | D | Ds | E | F | Fs | G | Gs | A | As | B
     deriving (Eq, Ord, Show, Read, Enum)
 
-data Scale = Major | Pentatonic | Blues
+data Scale = Major | Minor | Harmonic | Pentatonic | Blues
     deriving (Eq, Show, Read)
 
 data Interval = Root       | MinorSecond   | Second          | MinorThird   |
@@ -36,6 +36,8 @@ neckDots      = [3, 5, 7, 9]
 neckLength    = 13
 
 scale Major      = [Root, Second, Third, PerfectFourth, PerfectFifth, Sixth, Seventh]
+scale Minor      = [Root, Second, MinorThird, PerfectFourth, PerfectFifth, MinorSixth, MinorSeventh]
+scale Harmonic   = [Root, Second, MinorThird, PerfectFourth, PerfectFifth, MinorSixth, Seventh]
 scale Pentatonic = [Root, Second, Third, PerfectFifth, Sixth]
 scale Blues      = [Root, Second, MinorThird, Third, PerfectFifth, Sixth]
 
