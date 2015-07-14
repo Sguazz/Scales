@@ -1,6 +1,6 @@
 module Lib.Utils where
 
--- Defining a couple of useful thins for later
+-- Defining a couple of useful things for later
 
 type MarkedList a = [(a, Bool)]
 

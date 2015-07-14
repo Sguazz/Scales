@@ -1,10 +1,16 @@
 # Scales
 
-## Usage
+### Usage
     runhaskell Scales.hs <key> <scale> <mode>
     -- e. g.
     -- runhaskell Scles.hs C Major Ionian
 Check out `Lib.DataTypes` to see the possible values
+
+### tests
+    runhaskell ScaleTests.hs
+Mostly quickcheck.
+
+### What is this?
 
 This little project is excuse to learn Haskell as I dump stuff I'm learning
 about music theory.
@@ -17,6 +23,7 @@ I'm too lazy to explain how they work within this little thing right now.
 Suffice to say, maybe as I learn more I'll come up with a better way combine
 them, but for now this will do.
 
+### Features
 So here's the list of current features:
 * Display the full scale/mode combination for an arbitrary key
 * Calculate the relative modes (e.g. "A Aeolian is the same as C Ionian")
@@ -26,3 +33,7 @@ So here's the list of current features:
 TODO:
 * Add an interactive menu to select things, instead (or on top of?) using command line arguments
 * Add a piano representation on top of the guitar
+
+TODO that would require at least a different name:
+* Add chord builder
+* ...Other stuff with chords I guess
