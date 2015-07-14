@@ -23,9 +23,9 @@ allStrings s m k = map (stringMarks s m k)
 
 -- Guitar neck
 
-bar   = "\x1b[37m" ++ "|"
-on    = "\x1b[31m" ++ "x"
-off   = "\x1b[34m" ++ "-"
+bar   = grey ++ "|"
+on    = red  ++ "x"
+off   = blue ++ "-"
 
 guitarNeck :: Scale -> Mode -> Key -> [String]
 guitarNeck s m k = columnLayout " " ("" : captions) (neckHeader : strings)

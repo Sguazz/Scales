@@ -12,7 +12,10 @@ import Lib.Utils
 -- Whatever
 
 clear = "\x1b[39m"
-grey  = "\x1b[33m"
+grey  = "\x1b[37m"
+red   = "\x1b[31m"
+blue  = "\x1b[34m"
+
 hr    = "---------------"
 
 padWith :: a -> Int -> [a] -> [a]
@@ -48,6 +51,6 @@ columnLayout :: String -> [String] -> [String] -> [String]
 columnLayout s c1 c2 = zipWith layout (padList c1') c2'
   where layout l1 l2 = l1 ++ s ++ l2
         [c1', c2'] = padList' [c1, c2]
-    
+
 display :: [String] -> IO ()
 display = putStrLn . unlines
