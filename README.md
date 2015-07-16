@@ -12,7 +12,7 @@ Mostly quickcheck.
 
 ### What is this?
 
-This little project is excuse to learn Haskell as I dump stuff I'm learning
+This little project is an excuse to learn Haskell as I dump stuff I'm learning
 about music theory.
 
 For the time being it's mostly about scales and modes, hence the highly
@@ -31,8 +31,8 @@ So here's the list of current features:
 * Display a rudimentary representation of a guitar neck to show the scale
 
 TODO:
-* Add an interactive menu to select things, instead (or on top of?) using command line arguments
-* Add a piano representation on top of the guitar
+* Add an interactive menu to select things, instead (or on top?) of using command line arguments
+* Add a piano representation in addition to that of a guitar
 
 TODO that would require at least a different name:
 * Add chord builder

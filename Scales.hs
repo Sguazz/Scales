@@ -25,11 +25,6 @@ modulationColumn m k = mapWithHeader title (modulations m k)
 
 -- Layout
 
-menuLayout :: Scale -> Mode -> Key -> [String]
-menuLayout s m k = columns [ spinWheel [C ..] k
-                           , spinWheel [Major ..] s
-                           , spinWheel [Ionian ..] m ]
-
 layout :: Scale -> Mode -> Key -> [String]
 layout s m k =
     rows [ columns [ scaleColumn s m k
@@ -41,6 +36,8 @@ everything :: Scale -> Mode -> Key -> [String]
 everything s m k = rows [ menuLayout s m k
                         , ["- - - - - - - - - - - - - - - - - -"]
                         , layout s m k ]
+
+-- main = forever (printMenu >> readChoice >>= menuAction)
 
 main = do
     [key, scale, mode] <- getArgs
