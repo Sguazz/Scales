@@ -27,6 +27,10 @@ bar   = grey ++ "|"
 on    = red  ++ "x"
 off   = blue ++ "-"
 
+fret :: Bool -> String
+fret True  = on
+fret False = off
+
 guitarNeck :: Scale -> Mode -> Key -> [String]
 guitarNeck s m k = columnLayout " " ("" : captions) (neckHeader : strings)
   where captions = map show guitarStrings
@@ -36,9 +40,8 @@ allGuitarStrings :: [[Bool]] -> [String]
 allGuitarStrings = map guitarString
 
 guitarString :: [Bool] -> String
-guitarString = (++ clear) . intercalate bar . map fret . take neckLength
-  where fret True  = off ++ on  ++ off
-        fret False = off ++ off ++ off
+guitarString = (++ clear) . intercalate bar . map fullFret . take neckLength
+    where fullFret f = off ++ fret f ++ off
 
 neckHeader :: String
 neckHeader = unwords . take neckLength $ frets

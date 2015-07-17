@@ -35,7 +35,7 @@ padList' = padListWith pad'
 -- Such layout very impress wow
 
 mapWithHeader :: (Show k, Show v, Eq k, Eq v) => String -> Map k v -> [String]
-mapWithHeader t m = t : hr : showMap (nub . tops $ m)
+mapWithHeader t m = t : hr : showMap (tops' m)
 
 showMap :: (Show k, Show v) => Map k v -> [String]
 showMap m = columnLayout " - " ks vs

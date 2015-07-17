@@ -48,7 +48,7 @@ prop_padding as = all ((== l) . length) $ padList as
 -------------
 
 sortedScale :: Scale -> Mode -> Key -> [Note]
-sortedScale s m k = sort . nub . tops $ scaleNotes s m k
+sortedScale s m k = sort . tops' $ scaleNotes s m k
 
 sortedScale' :: Scale -> (Key, Mode) -> [Note]
 sortedScale' s (k, m) = sortedScale s m k
