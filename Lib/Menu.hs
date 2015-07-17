@@ -15,11 +15,14 @@ import Lib.Layout
 type MenuState = (String, String, String, String)
 --                Wheel   Scale   Mode    Key
 
-getWheel :: MenuState -> String
-getWheel (w, _, _, _) = w
-
 makeState :: Scale -> Mode -> Key -> MenuState
 makeState s m k = (head $ list "Wheel", show s, show m, show k)
+
+parseState :: MenuState -> (Scale, Mode, Key)
+parseState (_, s, m, k)= (read s, read m, read k)
+
+getWheel :: MenuState -> String
+getWheel (w, _, _, _) = w
 
 getStateValue :: String -> MenuState -> String
 getStateValue "Scale" (_, s, _, _) = s
@@ -34,10 +37,20 @@ list "Scale" = map show [Major ..]
 
 -- Controls
 
--- doStuff :: Char -> State MenuState MenuState
+doStuff :: MenuState -> Char -> IO MenuState
+doStuff (w, s, m, k) 'h' = return (menuStep (list "Wheel") w (-1), s, m, k)
+doStuff (w, s, m, k) 'l' = return (menuStep (list "Wheel") w   1 , s, m, k)
+-- doStuff (w, s, m, k) 'j' = return (menuStep (list "Wheel") w (-1), s, m, k)
+-- doStuff (w, s, m, k) 'k' = return (menuStep (list "Wheel") w (-1), s, m, k)
+doStuff s            _   = return s
 
 getAction :: IO Char
 getAction = hSetBuffering stdin NoBuffering >> hSetEcho stdin False >> getChar
+
+menuStep :: [String] -> String -> Int -> String
+menuStep m i s = m !! index
+  where n = fromJust $ i `elemIndex` m
+        index = min (max (n+s) 0) (length m - 1)
 
 ---------------
 -- Interface --

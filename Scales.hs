@@ -25,20 +25,23 @@ modulationColumn m k = mapWithHeader title (modulations m k)
 
 -- Layout
 
-layout :: Scale -> Mode -> Key -> [String]
-layout s m k =
-    rows [ columns [ scaleColumn s m k
-                   , relativeColumn m k
-                   , modulationColumn m k ]
-         , guitarNeck s m k ]
+layout :: (Scale, Mode, Key) -> [String]
+layout (s, m, k) = rows [ columns [ scaleColumn s m k
+                                  , relativeColumn m k
+                                  , modulationColumn m k ]
+                        , guitarNeck s m k ]
 
-everything :: Scale -> Mode -> Key -> [String]
-everything s m k = rows [ menuLayout s m k
-                        , ["- - - - - - - - - - - - - - - - - -"]
-                        , layout s m k ]
+printEveryting :: MenuState -> IO ()
+printEveryting s = fullScreenDisplay $ rows [ menu s
+                                            , ["- - - - - - - - - - - - - - -"]
+                                            , layout (parseState s) ]
 
--- main = forever (printMenu >> readChoice >>= menuAction)
+app :: MenuState -> IO MenuState
+app s = printEveryting s >> getAction >>= doStuff s
+
+loop :: MenuState -> IO MenuState
+loop s = app s >>= loop
 
 main = do
     [key, scale, mode] <- getArgs
-    display $ everything (read scale) (read mode) (read key)
+    loop ("Key", scale, mode, key)
