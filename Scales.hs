@@ -19,7 +19,7 @@ scaleColumn s m k = mapWithHeader title (scaleWithIntervals s m k)
 
 relativeColumn :: Mode -> Key -> [String]
 relativeColumn m k = mapWithHeader title (relativeModes m k)
-  where title = pad colWidth $ "Same as..."
+  where title = pad colWidth "Same as..."
 
 modulationColumn :: Mode -> Key -> [String]
 modulationColumn m k = mapWithHeader title (modulations m k)
@@ -38,11 +38,8 @@ printEveryting s = fullScreenDisplay $ rows [ menu s
                                             , ["- - - - - - - - - - - - - - -"]
                                             , layout (parseState s) ]
 
-app :: MenuState -> IO MenuState
-app s = printEveryting s >> getAction >>= doStuff s
-
 loop :: MenuState -> IO MenuState
-loop s = app s >>= loop
+loop s = printEveryting s >> getAction >>= doStuff s >>= loop
 
 main = do
     [key, scale, mode] <- getArgs

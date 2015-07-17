@@ -1,6 +1,5 @@
 module Lib.Menu where
 
-import Control.Monad.State
 import Data.List
 import Data.Maybe
 import System.IO
@@ -45,7 +44,9 @@ list "Scale" = map show [Major ..]
 
 wheels = list "Wheel"
 
--- Controls
+--------------
+-- Controls --
+--------------
 
 doStuff :: MenuState -> Char -> IO MenuState
 doStuff s@(w,_,_,_) 'D' = return $ setWheel s $ menuStep wheels w (-1)
