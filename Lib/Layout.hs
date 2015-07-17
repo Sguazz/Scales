@@ -1,6 +1,7 @@
 module Lib.Layout where
 
 import Data.List
+import System.Process
 
 import Lib.DataTypes
 import Lib.Utils
@@ -52,5 +53,7 @@ columnLayout s c1 c2 = zipWith layout (padList c1') c2'
   where layout l1 l2 = l1 ++ s ++ l2
         [c1', c2'] = padList' [c1, c2]
 
-display :: [String] -> IO ()
-display = putStrLn . unlines
+fullScreenDisplay :: [String] -> IO ()
+fullScreenDisplay ss = do
+    system "clear"
+    putStrLn $ unlines ss

@@ -11,37 +11,39 @@ import Lib.Utils
 
 -- Things we want to see
 
+colWidth = 25
+
 scaleColumn :: Scale -> Mode -> Key -> [String]
 scaleColumn s m k = mapWithHeader title (scaleWithIntervals s m k)
-  where title = show k ++ " " ++ show s ++ " " ++ show m
+  where title = pad colWidth $ show k ++ " " ++ show s ++ " " ++ show m
 
 relativeColumn :: Mode -> Key -> [String]
 relativeColumn m k = mapWithHeader title (relativeModes m k)
-  where title = "Same as..."
+  where title = pad colWidth $ "Same as..."
 
 modulationColumn :: Mode -> Key -> [String]
 modulationColumn m k = mapWithHeader title (modulations m k)
-  where title = "Play these " ++ show m ++ " modes to get..."
+  where title = pad colWidth $ "Play these " ++ show m ++ " modes to get..."
 
 -- Layout
 
-menuLayout :: Scale -> Mode -> Key -> [String]
-menuLayout s m k = columns [ spinWheel [C ..] k
-                           , spinWheel [Major ..] s
-                           , spinWheel [Ionian ..] m ]
+layout :: (Scale, Mode, Key) -> [String]
+layout (s, m, k) = rows [ columns [ scaleColumn s m k
+                                  , relativeColumn m k
+                                  , modulationColumn m k ]
+                        , guitarNeck s m k ]
 
-layout :: Scale -> Mode -> Key -> [String]
-layout s m k =
-    rows [ columns [ scaleColumn s m k
-                   , relativeColumn m k
-                   , modulationColumn m k ]
-         , guitarNeck s m k ]
+printEveryting :: MenuState -> IO ()
+printEveryting s = fullScreenDisplay $ rows [ menu s
+                                            , ["- - - - - - - - - - - - - - -"]
+                                            , layout (parseState s) ]
 
-everything :: Scale -> Mode -> Key -> [String]
-everything s m k = rows [ menuLayout s m k
-                        , ["- - - - - - - - - - - - - - - - - -"]
-                        , layout s m k ]
+app :: MenuState -> IO MenuState
+app s = printEveryting s >> getAction >>= doStuff s
+
+loop :: MenuState -> IO MenuState
+loop s = app s >>= loop
 
 main = do
     [key, scale, mode] <- getArgs
-    display $ everything (read scale) (read mode) (read key)
+    loop ("Key", scale, mode, key)
