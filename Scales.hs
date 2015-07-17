@@ -11,17 +11,19 @@ import Lib.Utils
 
 -- Things we want to see
 
+colWidth = 25
+
 scaleColumn :: Scale -> Mode -> Key -> [String]
 scaleColumn s m k = mapWithHeader title (scaleWithIntervals s m k)
-  where title = show k ++ " " ++ show s ++ " " ++ show m
+  where title = pad colWidth $ show k ++ " " ++ show s ++ " " ++ show m
 
 relativeColumn :: Mode -> Key -> [String]
 relativeColumn m k = mapWithHeader title (relativeModes m k)
-  where title = "Same as..."
+  where title = pad colWidth $ "Same as..."
 
 modulationColumn :: Mode -> Key -> [String]
 modulationColumn m k = mapWithHeader title (modulations m k)
-  where title = "Play these " ++ show m ++ " modes to get..."
+  where title = pad colWidth $ "Play these " ++ show m ++ " modes to get..."
 
 -- Layout
 
