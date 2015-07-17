@@ -12,10 +12,14 @@ import Lib.Utils
 
 -- Whatever
 
-clear = "\x1b[39m"
-grey  = "\x1b[37m"
-red   = "\x1b[31m"
-blue  = "\x1b[34m"
+clear  = "\x1b[39m"
+red    = "\x1b[31m"
+green  = "\x1b[32m"
+yellow = "\x1b[33m"
+blue   = "\x1b[34m"
+pink   = "\x1b[35m"
+cyan   = "\x1b[36m"
+grey   = "\x1b[37m"
 
 hr    = "---------------"
 
