@@ -24,10 +24,18 @@ parseState (_, s, m, k)= (read s, read m, read k)
 getWheel :: MenuState -> String
 getWheel (w, _, _, _) = w
 
+setWheel :: MenuState -> String -> MenuState
+setWheel (_, s, m, k) w = (w, s, m, k)
+
 getStateValue :: String -> MenuState -> String
 getStateValue "Scale" (_, s, _, _) = s
 getStateValue "Mode"  (_, _, m, _) = m
 getStateValue "Key"   (_, _, _, k) = k
+
+setStateValue :: String -> MenuState -> String -> MenuState
+setStateValue "Scale" (w, _, m, k) s = (w, s, m, k)
+setStateValue "Mode"  (w, s, _, k) m = (w, s, m, k)
+setStateValue "Key"   (w, s, m, _) k = (w, s, m, k)
 
 list :: String -> [String]
 list "Wheel" = ["Key", "Scale", "Mode"]
@@ -35,14 +43,16 @@ list "Key"   = map show [C ..]
 list "Mode"  = map show [Ionian ..]
 list "Scale" = map show [Major ..]
 
+wheels = list "Wheel"
+
 -- Controls
 
 doStuff :: MenuState -> Char -> IO MenuState
-doStuff (w, s, m, k) 'h' = return (menuStep (list "Wheel") w (-1), s, m, k)
-doStuff (w, s, m, k) 'l' = return (menuStep (list "Wheel") w   1 , s, m, k)
--- doStuff (w, s, m, k) 'j' = return (menuStep (list "Wheel") w (-1), s, m, k)
--- doStuff (w, s, m, k) 'k' = return (menuStep (list "Wheel") w (-1), s, m, k)
-doStuff s            _   = return s
+doStuff s@(w,_,_,_) 'D' = return $ setWheel s $ menuStep wheels w (-1)
+doStuff s@(w,_,_,_) 'C' = return $ setWheel s $ menuStep wheels w   1
+doStuff s@(w,_,_,_) 'B' = return $ setStateValue w s $ menuStep (list w) (getStateValue w s)   1
+doStuff s@(w,_,_,_) 'A' = return $ setStateValue w s $ menuStep (list w) (getStateValue w s) (-1)
+doStuff s            c  = return s
 
 getAction :: IO Char
 getAction = hSetBuffering stdin NoBuffering >> hSetEcho stdin False >> getChar
