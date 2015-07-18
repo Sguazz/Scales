@@ -30,11 +30,11 @@ off   = blue ++ "-"
 
 fret :: Maybe Interval -> String
 fret Nothing             = off
-fret (Just Root)         = cyan   ++ "o"
-fret (Just MinorThird)   = yellow ++ "+"
-fret (Just Third)        = yellow ++ "+"
-fret (Just PerfectFifth) = green  ++ "*"
-fret _                   = red    ++ "x"
+fret (Just Root)         = cyan   ++ "X"
+fret (Just MinorThird)   = yellow ++ "t"
+fret (Just Third)        = yellow ++ "T"
+fret (Just PerfectFifth) = green  ++ "F"
+fret _                   = red    ++ "+"
 
 guitarNeck :: Scale -> Mode -> Key -> [String]
 guitarNeck s m k = columnLayout " " ("" : captions) (neckHeader : strings)
