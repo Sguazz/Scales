@@ -1,5 +1,7 @@
 module Lib.DataTypes where
 
+import Data.List
+
 ------------------
 -- Data & Types --
 ------------------
@@ -40,3 +42,6 @@ noteCount = length [C ..]
 
 tops :: Eq a => [a] -> [a]
 tops = take noteCount
+
+tops' :: Eq a => [a] -> [a]
+tops' = nub . tops

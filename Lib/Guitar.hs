@@ -15,30 +15,38 @@ neckLength    = 13
 
 -- Guitar strings stuff
 
-stringMarks :: Scale -> Mode -> Key -> Note -> [Bool]
-stringMarks s m k n = map snd . dropKeys n $ markNotes s m k
+allStrings :: Scale -> Mode -> Key -> [Note] -> [[Maybe Interval]]
+allStrings s m k = map (stringNotes s m k)
 
-allStrings :: Scale -> Mode -> Key -> [Note] -> [[Bool]]
-allStrings s m k = map (stringMarks s m k)
+stringNotes :: Scale -> Mode -> Key -> Note -> [Maybe Interval]
+stringNotes s m k n = map interval (chromatic n)
+  where scale = tops' $ scaleWithIntervals s m k
+        interval c = safeVal c scale
 
 -- Guitar neck
 
 bar   = grey ++ "|"
-on    = red  ++ "x"
 off   = blue ++ "-"
+
+fret :: Maybe Interval -> String
+fret Nothing             = off
+fret (Just Root)         = cyan   ++ "X"
+fret (Just MinorThird)   = yellow ++ "t"
+fret (Just Third)        = yellow ++ "T"
+fret (Just PerfectFifth) = green  ++ "F"
+fret _                   = red    ++ "+"
 
 guitarNeck :: Scale -> Mode -> Key -> [String]
 guitarNeck s m k = columnLayout " " ("" : captions) (neckHeader : strings)
   where captions = map show guitarStrings
         strings = allGuitarStrings $ allStrings s m k guitarStrings
 
-allGuitarStrings :: [[Bool]] -> [String]
+allGuitarStrings :: [[Maybe Interval]] -> [String]
 allGuitarStrings = map guitarString
 
-guitarString :: [Bool] -> String
-guitarString = (++ clear) . intercalate bar . map fret . take neckLength
-  where fret True  = off ++ on  ++ off
-        fret False = off ++ off ++ off
+guitarString :: [Maybe Interval] -> String
+guitarString = (++ clear) . intercalate bar . map fullFret . take neckLength
+    where fullFret f = off ++ fret f ++ off
 
 neckHeader :: String
 neckHeader = unwords . take neckLength $ frets
